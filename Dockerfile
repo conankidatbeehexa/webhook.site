@@ -40,10 +40,7 @@ ADD --chown=www-data:www-data /database /var/www/html/database
 ADD --chown=www-data:www-data /config /var/www/html/config
 ADD --chown=www-data:www-data /app /var/www/html/app
 
-RUN composer dump-autoload --optimize --no-dev \
-    && touch /var/www/html/database/database.sqlite \
-    && php artisan optimize \
-    && php artisan migrate
+RUN composer dump-autoload --optimize --no-dev
 
 ADD --chown=www-data:www-data /resources /var/www/html/resources
 COPY --chown=www-data:www-data --from=npm /app/public/css /var/www/html/public/css
@@ -51,4 +48,6 @@ COPY --chown=www-data:www-data --from=npm /app/public/js /var/www/html/public/js
 
 USER root
 
+CMD ["php", "artisan", "optimize"]
+CMD ["php", "artisan", "migrate"]
 CMD ["php", "artisan", "queue:work", "--daemon", "--tries=3", "--timeout=10"]
