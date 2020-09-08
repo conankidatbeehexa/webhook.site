@@ -50,3 +50,5 @@ COPY --chown=www-data:www-data --from=npm /app/public/css /var/www/html/public/c
 COPY --chown=www-data:www-data --from=npm /app/public/js /var/www/html/public/js
 
 USER root
+
+CMD ["php", "artisan", "queue:work", "--daemon", "--tries=3", "--timeout=10"]
